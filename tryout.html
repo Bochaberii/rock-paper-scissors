@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        .results {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .score {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <div class="results"></div>
+    <p>Human Score: <span class="score">0</span></p>
+    <p>Computer Score: <span class="score">0</span></p>
+    <button id="rockButton">Rock</button>
+    <button id="paperButton">Paper</button>
+    <button id="scissorsButton">Scissors</button>
+
+    <script>
+        let humanScore = 0;
+        let computerScore = 0;
+        const resultDiv = document.querySelector(".results");
+        const humanScoreSpan = document.querySelector(".score:nth-child(2)");
+        const computerScoreSpan = document.querySelector(".score:nth-child(4)");
+
+        function getComputerChoice() {
+            const randomNum = Math.floor(Math.random() * 3);
+            const choices = ["rock", "paper", "scissors"];
+            return choices[randomNum];
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            if (humanChoice === computerChoice) {
+                return "Tie!";
+            } else if (humanChoice === "rock") {
+                return (computerChoice === "scissors") ? "You win! Rock beats scissors!" : "You lose! Paper beats rock!";
+            } else if (humanChoice === "paper") {
+                return (computerChoice === "rock") ? "You win! Paper beats rock!" : "You lose! Scissors beat paper!";
+            } else if (humanChoice === "scissors") {
+                return (computerChoice === "paper") ? "You win! Scissors beat paper!" : "You lose! Rock beats scissors!";
+            }
+        }
+
+        function updateScores(roundResult) {
+            if (roundResult.includes("You win")) {
+                humanScore++;
+            } else if (roundResult.includes("You lose")) {
+                computerScore++;
+            }
+            humanScoreSpan.textContent = humanScore;
+            computerScoreSpan.textContent = computerScore;
+        }
+
+        function announceWinner(result) {
+            resultDiv.textContent = result;
+        }
+
+        // **Improvements:**
+
+        // 1. Removed logic for playing exactly five rounds (commented out gameLoop function)
+
+        // 2. Added button click event listeners:
+        const rockButton = document.getElementById("rockButton");
+        const paperButton = document.getElementById("paperButton");
+        const scissorsButton = document.getElementById("scissorsButton");
+
+        rockButton.addEventListener("click", function() {
+            const computerChoice = getComputerChoice();
+            const roundResult = playRound("rock", computerChoice);
+            resultDiv.textContent = roundResult;
+            updateScores(roundResult);
+        });
+
+        paperButton.addEventListener("click", function() {
+            const computerChoice = getComputerChoice();
+            const roundResult = playRound("paper", computerChoice);
+            resultDiv.textContent = roundResult;
+            updateScores(roundResult);
+        });
+
+        scissorsButton.addEventListener("click", function() {
+            const computerChoice = getComputerChoice();
+            const roundResult = playRound("scissors", computerChoice);
+            resultDiv.textContent = roundResult;
+            updateScores(roundResult);
+        });
+
+        // 3. Displaying running score using updateScores function
+
+        // 4. Announcing winner when a player reaches 5 points:
+        if (humanScore === 5 || computerScore === 5) {
+            const gameWinner = humanScore === 5 ? "You win the game!" : "You lose the game!";
+            announceWinner(gameWinner);
+            // You can disable buttons here to prevent further play (optional)
+        }
+    </script>
+</body>
+</html>
